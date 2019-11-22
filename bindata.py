@@ -44,12 +44,16 @@ def get_bins_1d(data1, data2, data1_err, data2_err, oversample=1, bins='', nbins
         OUTPUT:
             x = median binned data x
             y = median binned data y
-            stats = statistics of binned data:
-                [0]: signficance of each bin (i.e. S/N) - only y-data error taken into account
-                [1]: -1 sigma (15.9 pecentile) of y-data within bin
-                [2]: +1 sigma (84.1 pecentile) of y-data within bins
-                [3]: number of negative data points within with bins (useful for plotting)
-                [4]: number of posative data points within with bins (useful for plotting)
+            stats = statistics of binned data:                
+                ['significance'] = signficance of each bin (i.e. S/N) - only y-data error taken into account
+                ['ybin_err'] = error in each bin - only y-data error taken into account
+                ['-1sigma'] = -1 sigma (15.9 pecentile) of y-data within bin
+                ['+1sigma'] = +1 sigma (84.1 pecentile) of y-data within bins
+                ['nneg'] = number of negative data points within with bins (useful for plotting)
+                ['npos'] = number of posative data points within with bins (useful for plotting)
+                ['ntot'] = number of all data points within with bins (useful for plotting)
+                ['isnan'] = number of nan data points within with bins (useful for error checks)
+                ['isnotnan'] = number of non-nan data points within with bins (useful for error checks)
             bins = bin ranges, i.e. edges of bins
         '''
 
