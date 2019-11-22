@@ -88,7 +88,7 @@ def get_bins_1d(data1, data2, data1_err, data2_err, oversample=1, bins='', nbins
         p1[i] = np.nanpercentile(data2[ids], 50 - 34.1)
         p2[i] = np.nanpercentile(data2[ids], 50 + 34.1)
 
-        sigma_err_mean, sigma_err_median = sigma_err(data1_err[ids], oversample)
+        sigma_err_mean, sigma_err_median = sigma_err(data2_err[ids], oversample)
 
         sigma[i] = sigma_err_median
         significant[i] = y[i] / sigma[i]
