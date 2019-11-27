@@ -8,7 +8,7 @@ def get_coordinate_grid_gal(hdu):
 
     """Returns coordinate grid of array from RA/DEC in GALACTIC
         Input: 
-            hdu = Input fits hdu in J2000 coordinates
+            hdu = Input fits hdu in J2000 coordinates (ICRS only! - FK5 may not work)
         Output: 
             (coordinate_grid_l, coordinate_grid_b) = coordinates of each array index in GALACTIC
             (coordinate_grid_ra, coordinate_grid_dec) = coordinates of each array index in RA/DEC
@@ -24,12 +24,12 @@ def get_coordinate_grid_gal(hdu):
     coordinate_grid_l = np.empty(shape)
     coordinate_grid_b = np.empty(shape)
 
-    for row in range(shape[0]):
-        for col in range(shape[1]):
+    for row in range(shape[1]):
+        for col in range(shape[0]):
             
             index_grid_x[col, row] = row
             index_grid_y[col, row] = col
-
+    
     coordinate_grid_radec = wcs.all_pix2world(index_grid_x, index_grid_y, 0)
     coordinate_grid_ra, coordinate_grid_dec = coordinate_grid_radec
 
