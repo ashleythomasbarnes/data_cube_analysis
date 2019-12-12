@@ -260,6 +260,9 @@ def get_mom0err(nchan, rms_map, velo_res):
     
     nchan_sqrt = np.sqrt(nchan)
     mom0err = rms_map.data * nchan_sqrt * velo_res
+    
+    id_nan = np.where(mom0err==0)
+    mom0err[id_nan] = np.nan
 
     header = rms_map.header
     header['BUNIT'] = 'K km s-1'
