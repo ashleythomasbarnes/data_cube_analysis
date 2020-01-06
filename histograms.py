@@ -97,14 +97,13 @@ def get_histvalwt(data, bins='', nbins=50, logbins=False, norm=True, cum=False, 
             bins = np.linspace(min, max, nbins+1)
     else:
         nbins = len(bins)-1
+
     bins_cent = np.empty([nbins])
-
-
     hist = np.empty(nbins)*np.nan
 
     for i in range(nbins):
-        bins_cent[i] = np.nanmean([bins[i], bins[i+1]])
 
+        bins_cent[i] = np.nanmean([bins[i], bins[i+1]])
         ids = np.where((data > bins[i]) & (data < bins[i+1]))
         hist[i] = np.nansum(data[ids])
 
@@ -113,7 +112,8 @@ def get_histvalwt(data, bins='', nbins=50, logbins=False, norm=True, cum=False, 
     elif cum_err:
         hist = np.sqrt(np.cumsum(hist**2))
     if norm:
-        hist = hist / np.nanmax(np.absolute(hist))
+        # hist = hist / np.nanmax(np.absolute(hist))
+        hist = hist / np.nanmax(hist)
 
     return(bins, bins_cent, hist)
 
@@ -124,8 +124,10 @@ def get_histvalwt_fromanother(datax, datay, bins='', nbins=50, logbins=False, no
 
     Parameters
     ----------
-    data : np.array
-        input data
+    datax : np.array
+        input x-axis data (used for binning)
+    datay : np.array
+        input y-axis data (data to bin)
     bins : list
         input bin edges for histogram calculaiton; default=''
     nbins : int
@@ -161,14 +163,13 @@ def get_histvalwt_fromanother(datax, datay, bins='', nbins=50, logbins=False, no
             bins = np.linspace(min, max, nbins+1)
     else:
         nbins = len(bins)-1
+
     bins_cent = np.empty([nbins])
-
-
     hist = np.empty(nbins)*np.nan
 
     for i in range(nbins):
-        bins_cent[i] = np.nanmean([bins[i], bins[i+1]])
 
+        bins_cent[i] = np.nanmean([bins[i], bins[i+1]])
         ids = np.where((datax > bins[i]) & (datax < bins[i+1]))
         hist[i] = np.nansum(datay[ids])
 
@@ -177,6 +178,7 @@ def get_histvalwt_fromanother(datax, datay, bins='', nbins=50, logbins=False, no
     elif cum_err:
         hist = np.sqrt(np.cumsum(hist**2))
     if norm:
-        hist = hist / np.nanmax(np.absolute(hist))
+        # hist = hist / np.nanmax(np.absolute(hist))
+        hist = hist / np.nanmax(hist)
 
     return(bins, bins_cent, hist)
