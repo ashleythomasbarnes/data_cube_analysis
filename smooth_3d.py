@@ -41,8 +41,8 @@ def get_spectralsmooth(cube, res_t, res_c=''):
 
     if res_c == '':
         # Assuming beams are in kms-1
-        res_c = cube.header['CDELT3']
-    pix_c = cube.header['CDELT3']
+        res_c = np.absolute(cube.header['CDELT3'])
+    pix_c = np.absolute(cube.header['CDELT3'])
 
     kernel = get_kernelspectral(res_t, res_c, pix_c)
     smcube = cube.spectral_smooth(kernel)
@@ -65,10 +65,10 @@ def get_spatialsmooth(cube, res_t):
     -------
     smcube = Output cube containing the spatailly smoothed data and updated header
     """
-    
-    
+
+
     res_c = cube.header['BMAJ'] *3600
-    
+
     print("[INFO] Current resolution of %0.1f arcsec" %(res_c))
     print("[INFO] Target resolution of %0.1f arcsec" %(res_t))
 
