@@ -6,7 +6,9 @@ from astropy.convolution import Gaussian2DKernel, convolve, convolve_fft
 
 def get_coordinate_grid_gal(hdu, frame='fk5'):
 
-    """Returns coordinate grid of array from RA/DEC in GALACTIC
+    """Returns world coordinate grid of an image
+        [Image has to be in J2000 at the moment]
+        Gives both RA/DEC and GALACTIC
         Input:
             hdu = Input fits hdu in J2000 coordinates
             frame = Input reference frame; default is fk5
