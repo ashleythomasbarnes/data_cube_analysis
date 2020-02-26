@@ -62,9 +62,10 @@ def get_rms(cube, rms_velocities, outputfile=''):
         rms_velocity = rms_velocity * (au.km / au.s)
         rms_cube = cube.spectral_slab(rms_velocity[0], rms_velocity[1])
 
-        rms_arr[count, :, :] = np.nanstd(rms_cube, axis=0)
+        # rms_arr[count, :, :] = np.nanstd(rms_cube, axis=0)
 #         rms_arr[count, :, :] = np.sqrt(np.nansum(rms_cube**2, axis=0) / len(rms_cube)) #RMS CALC
-#         rms_arr[count, :, :] = stats.median_absolute_deviation(rms_cube, axis=0) #MAD
+        #MAD -> used incase some emission is incl. in rms
+        rms_arr[count, :, :] = stats.mad_std(rms_cube, axis=0)
 
         count += 1
 
