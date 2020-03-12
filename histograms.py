@@ -88,7 +88,9 @@ def get_histvalwt(data, bins='', nbins=50, logbins=False, norm=True, cum=False, 
     bin_cent : np.array
         bin centres, for easy plotting in matplotlib
     hist : np.array
-        histogram data for each bin centre
+        histogram value weighted (i.e. summed) data for each bin centre
+        - instead of returning the numbe of points within each bin
+            returns the sum of the values within the bins
     """
 
     data = data.flatten()
@@ -157,7 +159,9 @@ def get_histvalwt_fromanother(datax, datay, bins='', nbins=50, logbins=False, no
     bin_cent : np.array
         bin centres, for easy plotting in matplotlib
     hist : np.array
-        histogram data for each bin centre
+        histogram value weighted (i.e. summed) data for each bin centre
+        - instead of returning the numbe of points within each bin
+            returns the sum of the values within the bins
     """
 
     datax = datax.flatten()
@@ -193,6 +197,9 @@ def get_histvalwt_fromanother(datax, datay, bins='', nbins=50, logbins=False, no
 
     return(bins, bins_cent, hist)
 
+# import numpy as np
+# from sklearn.neighbors import KernelDensity
+# from sklearn.model_selection import GridSearchCV
 
 def get_histkde(data, bins='', nbins=50, norm=True, cum=False):
 
@@ -227,6 +234,7 @@ def get_histkde(data, bins='', nbins=50, norm=True, cum=False):
     """
 
     data = data.flatten()
+    nsample = len(data)
 
     if bins=='':
         vmin=np.nanmin(data)
@@ -249,7 +257,10 @@ def get_histkde(data, bins='', nbins=50, norm=True, cum=False):
 
     #Bandwidth Cross-Validation in Scikit-Learn
     #Fuck knows, see: https://jakevdp.github.io/blog/2013/12/01/kernel-density-estimation/
-    grid = GridSearchCV(KernelDensity(), {'bandwidth': bins_cent}, cv=20) # 20-fold cross-validation
+    if nsample <20:
+        grid = GridSearchCV(KernelDensity(), {'bandwidth': bins_cent}, cv=nsample) # 20-fold cross-validation
+    else:
+        grid = GridSearchCV(KernelDensity(), {'bandwidth': bins_cent}, cv=20) # 20-fold cross-validation
     grid.fit(data_)
     bw = grid.best_params_['bandwidth']
 
