@@ -292,6 +292,9 @@ def get_mom0err(nchan, rms_map, velo_res):
         Output map of err on mom0
     """
 
+
+    cdelt = np.absolute(velo_res)
+
     nchan_sqrt = np.sqrt(nchan)
     mom0err = rms_map.data * nchan_sqrt * velo_res
 
