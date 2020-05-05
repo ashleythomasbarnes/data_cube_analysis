@@ -272,6 +272,11 @@ def get_nchan(mask):
 
     return nchan
 
+def get_nchanbool(data):
+    """Gets number of channels witin each LOS"""
+    nchans = np.nansum(data*1, axis=0)
+    return(nchans)
+
 def get_mom0err(nchan, rms_map, velo_res):
 
     """Get map of err on mom0

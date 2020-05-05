@@ -101,3 +101,34 @@ def get_prunemask(mask, thresh):
         mask[k, :, :] = mask_
 
     return(mask)
+
+
+def get_expmask(cube, rms, beamarea=2):
+
+    """Get full expanded mask
+       Wrapper for getting threshold mask
+       binary dilation and closing
+       and then pruning with above some beam area
+       [under testing]"""
+
+    bmaj = cube.header['BMAJ']
+    bmin = cube.header['BMIN']
+    pix = np.absolute(cube.header['CDELT1'])
+    bmajp = bmaj/pix
+    bminp = bmin/pix
+    bareap = np.pi*bmajp*bminp
+    rad = np.floor(bmajp/2)
+
+    structure = get_circmask(radius=rad)
+
+    mask_l_, _ = get_threshmask(cube, rms.data, thresh=2)
+    mask_h_, _ = get_threshmask(cube, rms.data, thresh=5)
+
+    mask_l = mask_l_.include()
+    mask_h = mask_h_.include()
+
+    mask_d = binary_dilation(mask_h, iterations=-1, mask=mask_l)
+    mask_dc = binary_closing(mask_d, structure=structure, iterations=1)
+    mask_dcc = get_prunemask(mask_dc, thresh=bareap*2)
+
+    return(mask_dcc)
