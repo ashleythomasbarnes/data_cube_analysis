@@ -103,7 +103,7 @@ def get_prunemask(mask, thresh):
     return(mask)
 
 
-def get_expmask(cube, rms, beamarea=2):
+def get_expmask(cube, rms, hthresh=5, lthresh=2, beamarea=2):
 
     """Get full expanded mask
        Wrapper for getting threshold mask
@@ -121,8 +121,8 @@ def get_expmask(cube, rms, beamarea=2):
 
     structure = get_circmask(radius=rad)
 
-    mask_l_, _ = get_threshmask(cube, rms.data, thresh=2)
-    mask_h_, _ = get_threshmask(cube, rms.data, thresh=5)
+    mask_l_, _ = get_threshmask(cube, rms.data, thresh=lthresh)
+    mask_h_, _ = get_threshmask(cube, rms.data, thresh=hthresh)
 
     mask_l = mask_l_.include()
     mask_h = mask_h_.include()
