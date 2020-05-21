@@ -136,11 +136,15 @@ def get_rmsrob(cube):
             if len(spec_neg) < 10:
                 continue
 
-            sigma = np.nanstd(np.concatenate((spec_neg, -spec_neg)))
+            concat = np.concatenate((spec_neg, -spec_neg))
+            sigma = stats.mad_std(concat[~np.isnan(concat)])
             # simple code: cube_map[i,j] = np.nanstd(spec[spec<sig_false*sigma])
-            cube_map[i,j] = np.nanstd(spec[np.less(spec, sig_false*sigma, where=~np.isnan(spec))])
+            spec_ = spec[np.less(spec, sig_false*sigma, where=~np.isnan(spec))]
+            cube_map[i,j] = stats.mad_std(spec_[~np.isnan(spec_)])
 
     del header['*3']
+    del header['PV1_*']
+    header['WCSAXES'] = 2
     rms_map = fits.PrimaryHDU(data=cube_map, header=header)
 
     return rms_map
