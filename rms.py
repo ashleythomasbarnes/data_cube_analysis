@@ -28,27 +28,21 @@ def get_rms(cube, rms_velocities, outputfile=''):
         map of rms values
     """
 
+    rms_cubetot = ['']*len(rms_velocities)
 
-    count = 0
-    rms_arr = np.empty([len(rms_velocities), cube.shape[1], cube.shape[2]]) * np.nan
+    for i,rms_velocity in enumerate(rms_velocities):
 
-    for rms_velocity in rms_velocities:
+        rms_velocity = rms_velocity*(au.km/au.s)
 
-        rms_velocity = rms_velocity * (au.km / au.s)
         rms_cube = cube.spectral_slab(rms_velocity[0], rms_velocity[1])
+        rms_cubetot[i]=rms_cube.hdu.data
 
-        rms_arr[count, :, :] = np.nanstd(rms_cube, axis=0)
-#         rms_arr[count, :, :] = np.sqrt(np.nansum(rms_cube**2, axis=0) / len(rms_cube)) #RMS CALC
-        #MAD -> used incase some emission is incl. in rms
-        # rms_arr[count, :, :] = stats.mad_std(rms_cube, axis=0)
-
-        count += 1
-
-    rms_map = np.nanmean(rms_arr, axis = 0)
+    rms_cubetot = np.vstack(rms_cubetot)
+    rms_map = np.nanstd(rms_cubetot, axis = 0)
 
     header = cube.header
     del header['*3']
-    del header['PV1_*']
+    del header['PV*']
     header['WCSAXES'] = 2
     rms_map = fits.PrimaryHDU(data=rms_map, header=header)
 
