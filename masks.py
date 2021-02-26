@@ -104,12 +104,12 @@ def get_prunemask(mask, thresh):
     return(mask)
 
 
-def get_prunemaskvelo(mask):
+def get_prunemaskvelo(mask, npix=1):
 
-    """Determined if mask connected by one channel either side of line"""
+    """Determined if mask connected by npix channel either side of line"""
 
-    roll1 = np.roll(mask, -1, axis=0)
-    roll2 = np.roll(mask, 1, axis=0)
+    roll1 = np.roll(mask, -1*npix, axis=0)
+    roll2 = np.roll(mask, 1*npix, axis=0)
     mask_ = mask&roll1&roll2
 
     return(mask_)
@@ -128,7 +128,7 @@ def get_prunemaskvelo(mask):
 #     return(mask)
 
 def get_expmask(cube, rms, hthresh=5, lthresh=2,
-                beamarea=2, radfrac=1, randomnoise=False):
+                beamarea=2, radfrac=1, randomnoise=False, npix=1):
 
     """Get full expanded mask
        Wrapper for getting threshold mask
@@ -153,6 +153,9 @@ def get_expmask(cube, rms, hthresh=5, lthresh=2,
             Default = 1 beam size
        randomnoise :
             Add random noise channels into mask
+        npix :
+            Number of pixels to be connected either side of line
+            (i.e remove noise spikes)
        Returns
        -------
        mask : array
@@ -174,7 +177,7 @@ def get_expmask(cube, rms, hthresh=5, lthresh=2,
     mask_l = mask_l_.include()
     mask_h = mask_h_.include()
 
-    mask_h = get_prunemaskvelo(np.copy(mask_h))
+    mask_h = get_prunemaskvelo(np.copy(mask_h), npix=npix)
 
     mask_d = binary_dilation(mask_h, iterations=-1, mask=mask_l)
     mask_dc = binary_closing(mask_d, structure=structure, iterations=1)
