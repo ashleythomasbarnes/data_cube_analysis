@@ -23,12 +23,12 @@ def get_momentmaps(cube, rms, mom_velocity='', velomoms=False):
         ['mom0', 'max', 'mom1', 'sigma', 'variance', 'fwhm']
     """
 
-    if mom_velocity!='':
+    try:
         velo_min = mom_velocity[0]*au.km / au.s
         velo_max = mom_velocity[1]*au.km / au.s
         cube_slab = cube.spectral_slab(velo_min, velo_max)
 
-    else:
+    except:
         print('[INFO] No velocity range.')
         cube_slab = cube
 

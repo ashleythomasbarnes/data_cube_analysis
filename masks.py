@@ -28,7 +28,7 @@ def get_threshmask(cube, thresh_map, thresh=0):
         Output masked cube
     """
 
-    mask = cube > ((thresh_map * au.K) * thresh)
+    mask = cube > ((thresh_map * cube.unit) * thresh)
     cube_masked = cube.with_mask(mask)
 
     return mask, cube_masked

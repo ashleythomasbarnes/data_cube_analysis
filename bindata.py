@@ -29,7 +29,7 @@ def sigma_err_2d(data1_err, data2_err):
 ####
 
 ### Get binned y data, with defined bins in x data
-def get_bins_1d(data1, data2, data1_err, data2_err, oversample=1, bins='', nbins=10, logbins=False, method='median'):
+def get_bins_1d(data1, data2, data1_err=None, data2_err=None, oversample=1, bins=None, nbins=10, logbins=False, method='median'):
 
     '''Takes two numpy arrays of data and computes the binned data.
         INPUT:
@@ -60,6 +60,11 @@ def get_bins_1d(data1, data2, data1_err, data2_err, oversample=1, bins='', nbins
 
     data1 = data1.flatten()
     data2 = data2.flatten()
+
+    if data1_err is None:
+        data1_err = np.zeros_like(data1)
+        data2_err = data1_err.copy()
+
     data1_err = data1_err.flatten()
     data2_err = data2_err.flatten()
 
@@ -71,7 +76,7 @@ def get_bins_1d(data1, data2, data1_err, data2_err, oversample=1, bins='', nbins
     data2_err = data2_err[id_nonnan]
 
 
-    if bins=='':
+    if bins is None: 
         xmin=np.nanmin(data1)
         xmax=np.nanmax(data1)
         if logbins:
