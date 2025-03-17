@@ -29,10 +29,10 @@ def get_hist(data, bins='', nbins=50, logbins=False, norm=True, cum=False):
     hist : np.array
         histogram data for each bin centre
     """
-
+    
     data = data.flatten()
 
-    if bins=='':
+    if bins.all() is None:
         vmin=np.nanmin(data)
         vmax=np.nanmax(data)
 
